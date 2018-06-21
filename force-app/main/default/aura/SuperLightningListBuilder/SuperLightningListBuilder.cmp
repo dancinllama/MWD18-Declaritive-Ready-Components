@@ -1,0 +1,128 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,flexipage:availableForAllPageTypes" access="global" extends="c:Abstract" controller="SuperLightningListBuilderCtrl">
+    <!-- global / user defined attributes -->
+    <aura:attribute name="csvFileName" type="String" access="global" required="false" default="MyFilename.csv" />
+    <aura:attribute name="csvSeparator" type="String" access="global" required="false" default="comma" />
+    <aura:attribute name="displayExportToCSV" type="boolean" access="global" default="true" />
+    <aura:attribute name="displayFilter" type="boolean" access="global" default="true" />
+    <aura:attribute name="displayLexicon" type="boolean" access="global" default="true" />
+    <aura:attribute name="displayAddAction" type="boolean" access="global" default="true" />
+    <aura:attribute name="listType" type="String" access="global" default="Filtered List" />
+    <aura:attribute name="listView" type="String" access="global" required="false" default="" />
+    <aura:attribute name="searchLabel" type="String" access="global" required="true" default="Search" />
+    <aura:attribute name="searchResultsIcon" type="String" access="global" required="true" default="standard:Account" />
+    <aura:attribute name="selectedLabel" type="String" access="global" required="true" default="Selected Options:" />
+    <aura:attribute name="subtitle" type="String" access="global" required="true" />
+    <aura:attribute name="title" type="String" access="global" required="true" />
+    
+    <!-- global / other attributes -->
+    <aura:attribute name="columns" type="List" access="global" required="false" default="[]" />
+    <aura:attribute name="records" type="Object[]" access="global" required="false" default="[]" />
+    
+    
+    <!-- public attributes -->
+    <aura:attribute name="selectedLetter" type="String" default="All" access="public" />
+    
+    <!-- private attributes -->
+    <aura:attribute name="filteredData" type="Object[]" default="[]" access="private" />
+    <aura:attribute name="searchResults" type="Object[]" access="private" />
+    <aura:attribute name="selectedRows" type="Object[]" access="private" default="[]" />
+    <aura:attribute name="sortedBy" type="String" default="Name" access="private" />
+    <aura:attribute name="sortedDirection" type="String" default="asc" access="private" />
+    <aura:attribute name="sortDirection" type="String" default="ASC" access="private" />
+    <aura:attribute name="tags" type="String[]" access="private" />
+    
+    <aura:attribute name="filterText" type="String" access="private" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:handler name="change" value="{!v.selectedLetter}" action="{!c.filterDataByLetter}" />
+    
+    <lightning:card >
+        <aura:set attribute="title">
+            {!v.title}
+            <p class="slds-text-title">{!v.subtitle}</p>
+        </aura:set>
+        <aura:set attribute="footer">
+            <aura:if isTrue="{!and(v.displayExportToCSV,not(empty(v.records)))}">
+            	<a onclick="{!c.exportCSV}">Export as CSV</a>
+            </aura:if>
+        </aura:set>
+        <!-- Search box / Filter Div -->
+        <div class="slds-form-element slds-p-vertical_x-small slds-p-horizontal_large slds-shrink-none slds-theme_shade">
+            <aura:if isTrue="{!v.displayFilter}">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label slds-assistive-text" for="searchbox">{!v.searchLabel}</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-combobox_container">
+                            <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                    <input aura:id="filterBox" type="text" class="slds-input slds-combobox__input" id="searchbox" aria-autocomplete="list" aria-controls="listbox-unique-id" autocomplete="off" role="textbox" placeholder="Search Salesforce" onkeyup="{!c.filterData}"/>
+                                    <lightning:icon iconName="utility:search" size="x-small" class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" />
+                                </div>
+                                <aura:if isTrue="{!not(empty(v.searchResults))}">
+                                    <div role="listbox">
+                                        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation">
+                                            <aura:iteration items="{!v.searchResults}" var="searchResult" >
+                                                <li role="presentation" class="slds-listbox__item">
+                                                    <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                        <span class="slds-media__figure">
+                                                            <lightning:icon iconName="{!v.searchResultIcon}" size="small" />
+                                                        </span>
+                                                        <span class="slds-media__body">
+                                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!searchResult.title}</span>
+                                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{!searchResult.subTitle}</span>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            </aura:iteration> 
+                                        </ul>
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <!-- Pill container under search box, displayed only if selected rows -->
+            <aura:if isTrue="{!not(empty(v.selectedRows))}">
+                <div class="slds-pill_container slds-pill_container_bare">
+                    <ul class="slds-listbox slds-listbox_horizontal slds-listbox_inline" role="listbox" aria-label="{!v.selectedLabel}" aria-orientation="horizontal">
+                        <aura:iteration items="{!v.selectedRows}" var="selectedRow">
+                            <li class="slds-listbox-item" role="presentation">
+                                <lightning:pill label="{!selectedRow.Name}" name="{!selectedRow.Id}" onremove="{!c.handleRemoveTag}"  />
+                            </li>
+                        </aura:iteration>
+                    </ul>
+                </div>
+            </aura:if>
+        </div>
+        <!-- Selected rows text / Lexicon Div -->
+        <div class="slds-form-element">
+            <div class="slds-grid slds-text-title lexiconRow">
+                <div class="slds-col slds-size_1-of-6 selectedRows">{!v.selectedRows.length + ' Item(s) Selected'}</div>
+                <div class="slds-col slds-size_5-of-6 lexiconFilter">
+                    <aura:if isTrue="{!v.displayLexicon}">
+                    	<c:LexiconFilter selectedLetter="{!v.selectedLetter}" />
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        <!-- scrollable div for displaying data -->
+        <div class="slds-form-element datatable">
+            <div class="slds-scrollable slds-grow">
+                <!-- data table -->
+                <lightning:datatable data="{!v.filteredData}" 
+                    columns="{!v.columns}" 
+                    keyField="Id"
+                    onsort="{!c.updateColumnSorting}" 
+                    hideCheckboxColumn="true"
+                    defaultSortDirection="desc" 
+                    selectedRows="{!v.selectedRows}"
+                    sortedBy="{!v.sortedBy}"
+                    sortedDirection="{!v.sortedDirection}" 
+					onrowaction="{!c.handleRowAction}"
+                />
+            </div>
+      	</div>
+    </lightning:card>
+</aura:component>

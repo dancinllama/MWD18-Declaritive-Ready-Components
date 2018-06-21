@@ -1,0 +1,27 @@
+.THIS .nomarginright svg{
+    margin-right: 0rem !important;
+}
+
+.THIS .nomarginright > button{
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.THIS .lexiconRow{
+    padding: 0.25rem;
+}
+
+.THIS .lexiconFilter{
+    text-align: right;
+    margin-right:  0;
+    margin-left: auto;
+}
+
+.THIS .selectedRows{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.THIS .subtitle{
+    font-size: 0.75rem;
+}

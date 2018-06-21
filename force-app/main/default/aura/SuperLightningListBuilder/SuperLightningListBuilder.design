@@ -1,0 +1,16 @@
+<design:component >
+    <design:attribute name="title" label="Title" description="Title of the component" />
+    <design:attribute name="subtitle" label="Sub Title" description="Subtitle of the component" />
+    <design:attribute name="selectedLabel" label="Selected Label" description="Label to display for selected options" />
+    <design:attribute name="searchLabel" label="Search Label" description="Label to display for search text" />
+    <design:attribute name="searchResultsIcon" label="Search Results Icon" description="SLDS  icon to display along side search results" />
+    <design:attribute name="displayAddAction" label="Display row add action(s)?" description="If true, displays a + button next to each row, and allows the user to add the row to a selectedRows list." /> 
+    <design:attribute name="displayFilter" label="Display Filter?" description="If true, show the search bar / list filter" />  
+    <design:attribute name="displayLexicon" label="Display Lexicon?" description="If true, shows the lexicon filter (letters A-Z and All)" />
+    <design:attribute name="displayExportToCSV" label="Display Export to CSV?" description="If true, allows the user to export the records to a CSV file." />
+    <!-- CSV Attributes -->
+    <design:attribute name="csvSeparator" label="If export to csv is available, specify the file separator to use." datasource="comma,semicolon" />
+    <design:attribute name="csvFileName" label="CSV File name" description="Filename used when exporting a CSV file" />    
+    <design:attribute name="listView" label="List View (Optional)" description="List view to use for displaying contacts" datasource="apex://ListViewDesignAttribute" />
+	
+</design:component>

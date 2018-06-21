@@ -1,0 +1,7 @@
+<aura:component >
+    <aura:attribute name="selectedLetter" type="String" default="" />
+    <aura:attribute name="alphabet" type="String[]" default="[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:iteration items="{!v.alphabet}" var="letter"><a class="lexiconLetter" onclick="{!c.updateLetter}" data-letter="{!letter}">{!letter}</a>|</aura:iteration>
+    <a class="lexiconLetter" onclick="{!c.updateLetter}" data-letter="All">All</a>
+</aura:component>
