@@ -3,8 +3,8 @@
     <contactEmail>support@demanchain.com</contactEmail>
     <label>Salesforce REST API Production</label>
     <oauthConfig>
-        <callbackUrl>https://agility-site-9949-dev-ed.cs92.my.salesforce.com/services/authcallback/Salesforce_REST_API_Production</callbackUrl>
-        <consumerKey>3MVG9JamK_x9K2XJeWN.iQF3gE8oxNG0zJnggfDTmqnO0VWlWzP3hBWX.ZGsWj7jg12E9IgZRaY0PcrXLn6Qf</consumerKey>
+        <callbackUrl>https://yourmydomaingoeshere.com/services/authcallback/Salesforce_REST_API_Production</callbackUrl>
+        <consumerKey></consumerKey>
         <scopes>Api</scopes>
         <scopes>RefreshToken</scopes>
     </oauthConfig>

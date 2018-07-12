@@ -3,8 +3,8 @@
     <contactEmail>support@demanchain.com</contactEmail>
     <label>Salesforce REST API Sandbox</label>
     <oauthConfig>
-        <callbackUrl>https://agility-site-9949-dev-ed.cs92.my.salesforce.com/services/authcallback/Salesforce_REST_API_Sandbox</callbackUrl>
-        <consumerKey>3MVG9JamK_x9K2XJeWN.iQF3gE6UwiEUSEopzxhCLC8v5WuQxpN2vR4Totr8ZFln2i7llV_s5eR.5hqiLMY1_</consumerKey>
+        <callbackUrl>https://yourmydomaingoeshere.com/services/authcallback/Salesforce_REST_API_Sandbox</callbackUrl>
+        <consumerKey></consumerKey>
         <scopes>Api</scopes>
         <scopes>RefreshToken</scopes>
     </oauthConfig>
